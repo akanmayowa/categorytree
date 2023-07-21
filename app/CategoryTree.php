@@ -18,45 +18,35 @@ class CategoryTree{
         
         public function addCategory(string $category, string $parent = null) : void 
         {
-            // check if categories array is empty
-            if(!empty($this->categories))   
-            {
-                $this->duplicateCategoryException($category); // a function to check for duplicatie category
-                $this->parentExistException($parent);  // a function to checks if parent exist
-            }
-            // insert category name and parent into categories array
-            $this->categories[] = [  'name' => $category, 'parent' => $parent  ];            
-        }
-
+            
+            
         /*
             A category that has already been inserted somewhere in the CategoryTree 
             should cause an InvalidArgumentException to be thrown. 
         */
-        
-        public function duplicateCategoryException(string $category)
-        {
-            if(in_array($category, array_column($this->categories, 'name')))
-            {
-                throw new \InvalidArgumentException('Caterory name already exists'); 
-            }
-        }
-
-
-        /* 
-        An InvalidArgumentException should also be thrown if a parent is specified that does not exist.
-        */
-        
-        public function parentExistException($parent) 
-        {
-             if(! is_null($parent))   // select all non null parents or non root parent 
+            if(! is_null($parent))   // select all non null parents or non root parent 
              { 
                 if(! in_array($parent, array_column($this->categories, 'name')))  // check if parent exists in columrn name of categories array
                 {
                    throw new \InvalidArgumentException('The Specified Parent doesnt exists');
                 }
              }
-        }
 
+        /* 
+        An InvalidArgumentException should also be thrown if a parent is specified that does not exist.
+        */
+        
+             if(in_array($category, array_column($this->categories, 'name')))
+             {
+                 throw new \InvalidArgumentException('Caterory name already exists'); 
+             }
+            
+            // insert category name and parent into categories array
+            $this->categories[] = [  
+                                    'name' => $category, 
+                                     'parent' => $parent 
+             ];            
+        }
 
         /*
             Children of a category A are categories that has catgorie A set as their parent 
